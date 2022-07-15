@@ -1,46 +1,65 @@
-export const countries = [
+export const countryList = [
     {
-        "id": 101,
-        "name": "India",
-        "iso3": "IND",
-        "iso2": "IN",
-        "numeric_code": "356",
-        "phone_code": "91",
-        "capital": "New Delhi",
-        "currency": "INR",
-        "currency_name": "Indian rupee",
-        "currency_symbol": "₹",
-        "tld": ".in",
-        "native": "भारत",
-        "region": "Asia",
-        "subregion": "Southern Asia",
-        "timezones": [
-          {
-            "zoneName": "Asia/Kolkata",
-            "gmtOffset": 19800,
-            "gmtOffsetName": "UTC+05:30",
-            "abbreviation": "IST",
-            "tzName": "Indian Standard Time"
-          }
-        ],
-        "translations": {
-          "kr": "인도",
-          "br": "Índia",
-          "pt": "Índia",
-          "nl": "India",
-          "hr": "Indija",
-          "fa": "هند",
-          "de": "Indien",
-          "es": "India",
-          "fr": "Inde",
-          "ja": "インド",
-          "it": "India",
-          "cn": "印度",
-          "tr": "Hindistan"
-        },
-        "latitude": "20.00000000",
-        "longitude": "77.00000000",
-        "emoji": "🇮🇳",
-        "emojiU": "U+1F1EE U+1F1F3"
-      }
-]
+      name: "Singapore",
+      code: "SG",
+      cities: [
+        "Ang Mo Kio New Town",
+        "Ayer Raja New Town",
+        "Bedok New Town",
+        "Boon Lay",
+        "Bukit Batok New Town",
+        "Bukit Panjang New Town",
+        "Bukit Timah",
+        "Bukit Timah Estate",
+        "Changi Village",
+        "Choa Chu Kang New Town",
+        "Clementi New Town",
+        "Holland Village",
+        "Hougang",
+        "Jurong East New Town",
+        "Jurong Town",
+        "Jurong West New Town",
+        "Kalang",
+        "Kampong Pasir Ris",
+        "Kembangan",
+        "Pandan Valley",
+        "Pasir Panjang",
+        "Punggol",
+        "Queenstown Estate",
+        "Serangoon",
+        "Simei New Town",
+        "Singapore",
+        "Tai Seng",
+        "Tampines New Town",
+        "Tanglin Halt",
+        "Tanjong Pagar",
+        "Toa Payoh New Town",
+        "Woodlands New Town",
+        "Yew Tee",
+        "Yishun New Town"
+      ]
+    },
+    {
+      name: "Bahrain",
+      code: "BH",
+      cities: [
+        "Al Budayyi`",
+        "Al Hadd",
+        "Al Hamalah",
+        "Al Janabiyah",
+        "Al Markh",
+        "Al Muharraq",
+        "Bani Jamrah",
+        "Barbar",
+        "Jurdab",
+        "Madinat `Isa",
+        "Madinat Hamad",
+        "Manama",
+        "Oil City",
+        "Sanabis",
+        "Sanad",
+        "Sitrah",
+        "Tubli"
+      ]
+    }
+  ];

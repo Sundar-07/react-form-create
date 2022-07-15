@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import Alerts from "../Alerts/Alerts";
-
+import { countryList } from "../jsonfiles/countries";
 
 function FormCreate() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
-  const [country, setCountry] = useState("");
-  const [city, setCity] = useState([]);
+  const [fromCountires, setFromCountries] = useState("");
+  const [fromCities, setFromCities] = useState([]);
   const [state, setState] = useState([]);
   const [message, setMessage] = useState("");
 
@@ -25,8 +25,7 @@ function FormCreate() {
   };
 
   // should not be an empty input values
-  const handleErrorsAll =
-    name || email || mobile || country || city || state || message;
+  const handleErrorsAll = name || email || mobile || state || message;
 
   // match validation
 
@@ -37,11 +36,11 @@ function FormCreate() {
 
   //countries states and cities lists
   const handleFromCountries = (e) => {
-    const country = countriesList.find(
+    const country = countryList.find(
       (country) => country.name === e.target.value
     );
-    setCountry(country.name);
-    setCity(country.cities);
+    setFromCountries(country.name);
+    setFromCities(country.cities);
   };
 
   //form submission
@@ -53,24 +52,24 @@ function FormCreate() {
       showAlert(true, "danger", "Invalid Email Address!");
     } else if (mobile.length > 10 || mobile.length < 10) {
       showAlert(true, "danger", "Mobile number must be in 10 digits!");
-    } else if(message.length > 100){
-        showAlert(true, "danger", "Message has exceeded the maximum number of words!");
-    } else if(!handleErrorsAll){
-        showAlert(true, "danger", "Input should not be an empty! Please check");
-    }
-    else {
+    } else if (message.length > 100) {
+      showAlert(
+        true,
+        "danger",
+        "Message has exceeded the maximum number of words!"
+      );
+    } else if (!handleErrorsAll) {
+      showAlert(true, "danger", "Input should not be an empty! Please check");
+    } else {
       showAlert(false);
       console.log({
         name,
         email,
         mobile,
-        country,
-        city,
+        
         state,
         message,
       });
-
-      console.log(countriesList)
     }
   };
 
@@ -128,13 +127,14 @@ function FormCreate() {
           <div className="col-sm-10">
             <select
               className="form-select"
-              onChange={(e) => setCountry(e.target.value)}
+              onChange={(e) => handleFromCountries(e)}
               aria-label="Default select example"
             >
-              <option>Select Country</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+              {countryList.map((country, key) => (
+                <option key={key} title={country.code} value={country.name}>
+                  {country.name}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -143,15 +143,12 @@ function FormCreate() {
             City:
           </label>
           <div className="col-sm-10">
-            <select
-              className="form-select"
-              aria-label="Default select example"
-              onChange={(e) => setCity(e.target.value)}
-            >
-              <option>Select City</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+            <select className="form-select" aria-label="Default select example">
+              {fromCities.map((city, key) => (
+                <option key={key} title="" value={city}>
+                  {city}
+                </option>
+              ))}
             </select>
           </div>
         </div>
