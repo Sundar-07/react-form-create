@@ -27,7 +27,7 @@ function Sample() {
   };
 
   // should not be an empty input values
-  const handleErrorsAll = name && email && mobile && state && message ;
+  const handleErrorsAll = name && email && mobile && state && message;
 
   // match email validation
 
@@ -80,14 +80,13 @@ function Sample() {
         "danger",
         "Message has exceeded the maximum number of words!"
       );
-    } else if (!selectedCountries || !selectedCity || !selectedState ) {
+    } else if (!selectedCountries || !selectedCity || !selectedState) {
       showAlert(
         true,
         "danger",
         "Please select the dropdown! Should not be an empty"
       );
-    }
-    else {
+    } else {
       // console.log({
       //   name,
       //   email,
@@ -110,22 +109,55 @@ function Sample() {
 
       const CardBoard = (
         <>
-      
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item"><b>Name:</b> {data.Name}</li>
-              <li className="list-group-item"><b>Email_ID:</b> {data.Email_ID}</li>
-              <li className="list-group-item"><b>Mobile_No:</b> {data.Mobile_No}</li>
-              <li className="list-group-item"><b>Country:</b> {data.Country}</li>
-              <li className="list-group-item"><b>State:</b> {data.State}</li>
-              <li className="list-group-item"><b>City:</b> {data.City}</li>
-              <li className="list-group-item"><b>Message:</b> {data.Message}</li>
-            </ul>
-       
+          <ul className="list-group list-group-flush">
+            <li className="list-group-item">
+              <b>Name:</b> {data.Name}
+            </li>
+            <li className="list-group-item">
+              <b>Email_ID:</b> {data.Email_ID}
+            </li>
+            <li className="list-group-item">
+              <b>Mobile_No:</b> {data.Mobile_No}
+            </li>
+            <li className="list-group-item">
+              <b>Country:</b> {data.Country}
+            </li>
+            <li className="list-group-item">
+              <b>State:</b> {data.State}
+            </li>
+            <li className="list-group-item">
+              <b>City:</b> {data.City}
+            </li>
+            <li className="list-group-item">
+              <b>Message:</b> {data.Message}
+            </li>
+          </ul>
         </>
       );
 
       showAlert(true, "success", CardBoard);
+        //auto clear
+      setName("");
+      setEmail("");
+      setMobile("");
+      setSelectedCity([]);
+      setSelectedState([]);
+      setSelectedCountries([]);
+      setMessage("");
     }
+  };
+
+  const clearRespomse = (e) => {
+    e.preventDefault();
+
+    setName("");
+    setEmail("");
+    setMobile("");
+    setSelectedCity([]);
+    setSelectedState([]);
+    setSelectedCountries([]);
+    setMessage("");
+    showAlert(true, "success", "Cleared !!");
   };
 
   // useEffect(() => {
@@ -136,7 +168,7 @@ function Sample() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form>
         {/* //alerts  */}
         {alert.show && <Alerts {...alert} removeAlert={showAlert} />}
         {/* End of alerts  */}
@@ -152,6 +184,7 @@ function Sample() {
               id="name"
               placeholder="Enter your Name"
               onChange={(e) => setName(e.target.value)}
+              value={name}
             />
           </div>
         </div>
@@ -166,6 +199,7 @@ function Sample() {
               id="email"
               placeholder="Enter your Email ID"
               onChange={(e) => setEmail(e.target.value)}
+              value={email}
             />
           </div>
         </div>
@@ -180,6 +214,7 @@ function Sample() {
               id="mob_no"
               placeholder="Enter your mobile number"
               onChange={(e) => setMobile(e.target.value)}
+              value={mobile}
             />
           </div>
         </div>
@@ -192,6 +227,7 @@ function Sample() {
               className="form-select"
               onChange={(e) => handleFromCountries(e)}
               aria-label="Default select example"
+              value={selectedCountries}
             >
               <option>Select Country</option>
               {countryList &&
@@ -217,6 +253,7 @@ function Sample() {
               className="form-select"
               onChange={(e) => handleFromState(e)}
               aria-label="Default select example"
+              value={selectedState}
             >
               <option>Select State</option>
               {state &&
@@ -237,6 +274,7 @@ function Sample() {
               className="form-select"
               aria-label="Default select example"
               onChange={(e) => setSelectedCity(e.target.value)}
+              value={selectedCity}
             >
               <option>Select City</option>
               {fromCities &&
@@ -259,13 +297,23 @@ function Sample() {
               rows="3"
               placeholder="Enter your message: (100 words)"
               onChange={(e) => setMessage(e.target.value)}
+              value={message}
             ></textarea>
           </div>
         </div>
         <div className="row">
-          <div className="col-sm-10">
-            <button type="submit" className="btn btn-primary">
+          <div className="col-auto">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onClick={handleSubmit}
+            >
               Submit
+            </button>
+          </div>
+          <div className="col-auto">
+            <button className="btn btn-danger" onClick={clearRespomse}>
+              Clear response
             </button>
           </div>
         </div>
