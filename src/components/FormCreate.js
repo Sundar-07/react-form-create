@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Alerts from "../Alerts/Alerts";
-import { countryList } from "../jsonfiles/countries";
+import { Country, State, City } from "country-state-city";
 
-function FormCreate() {
+function Sample() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
-  const [fromCountires, setFromCountries] = useState("");
   const [fromCities, setFromCities] = useState([]);
   const [state, setState] = useState([]);
   const [message, setMessage] = useState("");
 
+  const [selectedCountries, setSelectedCountries] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
   //errors alert
 
   const [alert, setAlert] = useState({
@@ -25,22 +27,36 @@ function FormCreate() {
   };
 
   // should not be an empty input values
-  const handleErrorsAll = name || email || mobile || state || message;
+  const handleErrorsAll = name && email && mobile && state && message ;
 
-  // match validation
+  // match email validation
 
   const validateEmail = (email) => {
     const reEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
     return reEmail;
   };
 
-  //countries states and cities lists
+  //country-states-cities handle by using package
+  const countryList = Country.getAllCountries();
+  const stateList = State.getAllStates();
+  const citiesList = City.getAllCities();
+
   const handleFromCountries = (e) => {
-    const country = countryList.find(
-      (country) => country.name === e.target.value
+    const st = stateList.filter(
+      (state) => state.countryCode === e.target.value
     );
-    setFromCountries(country.name);
-    setFromCities(country.cities);
+    console.log("**state", st);
+    setState(st);
+    //country selected value
+    setSelectedCountries(e.target.value);
+  };
+
+  const handleFromState = (e) => {
+    const ct = citiesList.filter((city) => city.stateCode === e.target.value);
+    console.log("**city", ct);
+    setFromCities(ct);
+    //state selected value
+    setSelectedState(e.target.value);
   };
 
   //form submission
@@ -48,35 +64,82 @@ function FormCreate() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validateEmail(email)) {
-      showAlert(true, "danger", "Invalid Email Address!");
+    if (!handleErrorsAll) {
+      showAlert(true, "danger", "Should not be an empty input.Please check! ");
+    } else if (!validateEmail(email)) {
+      showAlert(true, "danger", "Invalid Email Address! Please check");
     } else if (mobile.length > 10 || mobile.length < 10) {
-      showAlert(true, "danger", "Mobile number must be in 10 digits!");
+      showAlert(
+        true,
+        "danger",
+        "Mobile number must be in 10 digits! Please check"
+      );
     } else if (message.length > 100) {
       showAlert(
         true,
         "danger",
         "Message has exceeded the maximum number of words!"
       );
-    } else if (!handleErrorsAll) {
-      showAlert(true, "danger", "Input should not be an empty! Please check");
-    } else {
-      showAlert(false);
-      console.log({
-        name,
-        email,
-        mobile,
-        
-        state,
-        message,
-      });
+    } else if (!selectedCountries || !selectedCity || !selectedState ) {
+      showAlert(
+        true,
+        "danger",
+        "Please select the dropdown! Should not be an empty"
+      );
+    }
+    else {
+      // console.log({
+      //   name,
+      //   email,
+      //   mobile,
+      //   selectedCountries,
+      //   selectedState,
+      //   selectedCity,
+      //   message,
+      // });
+
+      const data = {
+        Name: name,
+        Email_ID: email,
+        Mobile_No: mobile,
+        Country: selectedCountries,
+        State: selectedState,
+        City: selectedCity,
+        Message: message,
+      };
+
+      const CardBoard = (
+        <>
+      
+            <ul className="list-group list-group-flush">
+              <li className="list-group-item"><b>Name:</b> {data.Name}</li>
+              <li className="list-group-item"><b>Email_ID:</b> {data.Email_ID}</li>
+              <li className="list-group-item"><b>Mobile_No:</b> {data.Mobile_No}</li>
+              <li className="list-group-item"><b>Country:</b> {data.Country}</li>
+              <li className="list-group-item"><b>State:</b> {data.State}</li>
+              <li className="list-group-item"><b>City:</b> {data.City}</li>
+              <li className="list-group-item"><b>Message:</b> {data.Message}</li>
+            </ul>
+       
+        </>
+      );
+
+      showAlert(true, "success", CardBoard);
     }
   };
+
+  // useEffect(() => {
+  //   // const countriesAll = Country.getAllCountries()
+  //   // console.log(State.getAllStates())
+  //   // console.log(City.getAllCities())
+  // }, [])
 
   return (
     <>
       <form onSubmit={handleSubmit}>
-        {alert.show && <Alerts {...alert} />}
+        {/* //alerts  */}
+        {alert.show && <Alerts {...alert} removeAlert={showAlert} />}
+        {/* End of alerts  */}
 
         <div className="mb-3 row">
           <label htmlFor="name" className="col-sm-2 col-form-label">
@@ -130,11 +193,38 @@ function FormCreate() {
               onChange={(e) => handleFromCountries(e)}
               aria-label="Default select example"
             >
-              {countryList.map((country, key) => (
-                <option key={key} title={country.code} value={country.name}>
-                  {country.name}
-                </option>
-              ))}
+              <option>Select Country</option>
+              {countryList &&
+                countryList.map((country, key) => (
+                  <option
+                    key={key}
+                    title={country.name}
+                    value={country.isoCode}
+                  >
+                    {country.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="mb-3 row">
+          <label htmlFor="state" className="col-sm-2 col-form-label">
+            State:
+          </label>
+          <div className="col-sm-10">
+            <select
+              className="form-select"
+              onChange={(e) => handleFromState(e)}
+              aria-label="Default select example"
+            >
+              <option>Select State</option>
+              {state &&
+                state.map((state, key) => (
+                  <option key={key} title="" value={state.isoCode}>
+                    {state.name}
+                  </option>
+                ))}
             </select>
           </div>
         </div>
@@ -143,29 +233,18 @@ function FormCreate() {
             City:
           </label>
           <div className="col-sm-10">
-            <select className="form-select" aria-label="Default select example">
-              {fromCities.map((city, key) => (
-                <option key={key} title="" value={city}>
-                  {city}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <div className="mb-3 row">
-          <label htmlFor="state" className="col-sm-2 col-form-label">
-            State:
-          </label>
-          <div className="col-sm-10">
             <select
               className="form-select"
-              onChange={(e) => setState(e.target.value)}
               aria-label="Default select example"
+              onChange={(e) => setSelectedCity(e.target.value)}
             >
-              <option>Select State</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+              <option>Select City</option>
+              {fromCities &&
+                fromCities.map((city, key) => (
+                  <option key={key} title="" value={city.stateCode}>
+                    {city.name}
+                  </option>
+                ))}
             </select>
           </div>
         </div>
@@ -195,4 +274,4 @@ function FormCreate() {
   );
 }
 
-export default FormCreate;
+export default Sample;
